@@ -1,3 +1,4 @@
+import 'package:basic/screens/landing.screen.dart';
 import 'package:basic/screens/settings.screen.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,8 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(Icons.home),
                 title: Text('Home'),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/');
+                  Navigator.of(context)
+                      .pushReplacementNamed(LandingScreen.routeName);
                 },
               ),
               Divider(),

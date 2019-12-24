@@ -1,4 +1,8 @@
+import 'package:basic/constants/constants.dart';
+import 'package:basic/screens/sign_up.screen.dart';
+import 'package:basic/stores/user.store.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import "../widgets/custom_textfield.widget.dart";
 import '../business/auth.dart';
@@ -10,6 +14,10 @@ import '../models/user.dart';
 
 class SignInScreen extends StatefulWidget {
   static const routeName = "/signIn";
+  final Function changeScreen;
+
+  SignInScreen(this.changeScreen);
+
   _SignInScreenState createState() => _SignInScreenState();
 }
 
@@ -51,134 +59,120 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                child: Text(
-                  "BASIC",
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.teal,
-                    decoration: TextDecoration.none,
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: "OpenSans",
-                  ),
+    final usersStore = Provider.of<UsersStore>(context);
+    return Stack(
+      children: <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              child: Text(
+                "BASIC",
+                softWrap: true,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.teal,
+                  decoration: TextDecoration.none,
+                  fontSize: 48.0,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "OpenSans",
                 ),
-                padding: const EdgeInsets.all(70),
               ),
-            ],
-          ),
-          Stack(
-            alignment: Alignment.topLeft,
-            children: <Widget>[
-              ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height / 5,
-                        bottom: 10.0,
-                        left: 15.0,
-                        right: 10.0),
-                    child: Text(
-                      "Sign In",
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.teal,
-                        decoration: TextDecoration.none,
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 20.0, bottom: 10.0, left: 15.0, right: 15.0),
-                    child: _emailField,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 10.0, bottom: 20.0, left: 15.0, right: 15.0),
-                    child: _passwordField,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 40.0),
-                    child: CustomFlatButton(
-                      title: "Log In",
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        _emailLogin(
-                            email: _email.text,
-                            password: _password.text,
-                            context: context);
-                      },
-                      splashColor: Colors.black12,
-                      borderColor: Color.fromRGBO(212, 20, 15, 1.0),
-                      borderWidth: 0,
+              padding: const EdgeInsets.all(70),
+            ),
+          ],
+        ),
+        Stack(
+          alignment: Alignment.topLeft,
+          children: <Widget>[
+            ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 5,
+                      bottom: 10.0,
+                      left: 15.0,
+                      right: 10.0),
+                  child: Text(
+                    "Sign In",
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       color: Colors.teal,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "OR",
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w300,
-                        fontFamily: "OpenSans",
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14.0, horizontal: 40.0),
-                    child: CustomFlatButton(
-                      title: "Facebook Login",
-                      fontSize: 22,
+                      decoration: TextDecoration.none,
+                      fontSize: 24.0,
                       fontWeight: FontWeight.w700,
-                      textColor: Colors.white,
-                      onPressed: () {},
-                      splashColor: Colors.black12,
-                      borderColor: Color.fromRGBO(59, 89, 152, 1.0),
-                      borderWidth: 0,
-                      color: Color.fromRGBO(59, 89, 152, 1.0),
+                      fontFamily: "OpenSans",
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-          Offstage(
-            offstage: !_blackVisible,
-            child: GestureDetector(
-              onTap: () {},
-              child: AnimatedOpacity(
-                opacity: _blackVisible ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 400),
-                curve: Curves.ease,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.black54,
                 ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 20.0, bottom: 10.0, left: 15.0, right: 15.0),
+                  child: _emailField,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 10.0, bottom: 20.0, left: 15.0, right: 15.0),
+                  child: _passwordField,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14.0, horizontal: 40.0),
+                  child: CustomFlatButton(
+                    title: "Log In",
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      _emailLogin(
+                          email: _email.text,
+                          password: _password.text,
+                          usersStore: usersStore);
+                    },
+                    splashColor: Colors.black12,
+                    borderColor: Color.fromRGBO(212, 20, 15, 1.0),
+                    borderWidth: 0,
+                    color: Colors.teal,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14.0, horizontal: 40.0),
+                  child: CustomFlatButton(
+                    title: "Register",
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      widget.changeScreen(Constants.REGISTER_TYPE);
+                    },
+                    splashColor: Colors.black12,
+                    borderColor: Color.fromRGBO(59, 89, 152, 1.0),
+                    borderWidth: 0,
+                    color: Color.fromRGBO(59, 89, 152, 1.0),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Offstage(
+          offstage: !_blackVisible,
+          child: GestureDetector(
+            onTap: () {},
+            child: AnimatedOpacity(
+              opacity: _blackVisible ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 400),
+              curve: Curves.ease,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                color: Colors.black54,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -188,24 +182,21 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
-  void _emailLogin(
-      {String email, String password, BuildContext context}) async {
-    if (Validator.validateEmail(email) &&
-        Validator.validatePassword(password)) {
-      try {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        _changeBlackVisible();
-        await Auth.signIn(email, password)
-            .then((uid) => Navigator.of(context).pop());
-      } catch (e) {
-        print("Error in email sign in: $e");
-        String exception = Auth.getExceptionText(e);
-        _showErrorAlert(
-          title: "Login failed",
-          content: exception,
-          onPressed: _changeBlackVisible,
-        );
-      }
+  void _emailLogin({String email, String password, final usersStore}) async {
+    if (!Validator.validateEmail(email)) {
+      _changeBlackVisible();
+      _showErrorAlert(
+          title: Constants.EMAIL_FAIL,
+          content: Constants.EMAIL_FAIL_MESSAGE,
+          onPressed: _changeBlackVisible);
+    } else if (!Validator.validatePassword(password)) {
+      _changeBlackVisible();
+      _showErrorAlert(
+          title: Constants.PASSWORD_FAIL,
+          content: Constants.PASSWORD_FAIL_MESAGE,
+          onPressed: _changeBlackVisible);
+    } else {
+      usersStore.userSignIn(email, password);
     }
   }
 

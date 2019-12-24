@@ -20,4 +20,8 @@ class Validator {
   static bool validatePassword(String text) {
     return text.toString().length >= 6;
   }
+
+  static bool validateEmailMatch(String text, String confirmText) {
+    return text.toString() == confirmText.toString();
+  }
 }
