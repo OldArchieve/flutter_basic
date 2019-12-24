@@ -1,11 +1,8 @@
-import 'package:basic/screens/auth.screens.dart';
-import 'package:basic/screens/landing.screen.dart';
-import 'package:basic/screens/sign_in.screen.dart';
-import 'package:basic/screens/sign_up.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../stores/user.store.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import '../screens/auth.screens.dart';
+import '../screens/landing.screen.dart';
 
 class EntryScreen extends StatefulWidget {
   @override
@@ -13,19 +10,39 @@ class EntryScreen extends StatefulWidget {
 }
 
 class _EntryScreenState extends State<EntryScreen> {
-  bool isLoggedIn = false;
+  bool _isLoggedIn = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    () async {
+      await new Future.delayed(Duration.zero, () {
+        tryAutoLogin();
+      });
+    }();
+
+    super.initState();
+  }
+
+  void tryAutoLogin() async {
+    final usersStore = Provider.of<UsersStore>(context);
+    await usersStore.autoLogin();
+    setState(() {
+      _isLoggedIn = usersStore.isUserLoggedIn;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final usersStore = Provider.of<UsersStore>(context);
-    return Observer(
-      builder: (_con) {
-        if (usersStore.isUserLoggedIn) {
-          return LandingScreen();
-        } else {
-          return AuthScreens();
-        }
-      },
+    return Container(
+      child: _isLoading
+          ? Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : _isLoggedIn ? LandingScreen() : AuthScreens(),
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'package:basic/screens/landing.screen.dart';
-import 'package:basic/screens/settings.screen.dart';
+import '../screens/landing.screen.dart';
+import '../screens/settings.screen.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

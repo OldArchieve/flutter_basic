@@ -1,16 +1,13 @@
-import 'package:basic/constants/constants.dart';
-import 'package:basic/screens/sign_up.screen.dart';
-import 'package:basic/stores/user.store.dart';
+import '../constants/constants.dart';
+import '../stores/user.store.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import "../widgets/custom_textfield.widget.dart";
-import '../business/auth.dart';
 import '../business/validator.dart';
 import 'package:flutter/services.dart';
 import '../widgets/custom_flatbutton.widget.dart';
 import '../widgets/custom_alert_dialog.widget.dart';
-import '../models/user.dart';
 
 class SignInScreen extends StatefulWidget {
   static const routeName = "/signIn";
@@ -150,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     splashColor: Colors.black12,
                     borderColor: Color.fromRGBO(59, 89, 152, 1.0),
                     borderWidth: 0,
-                    color: Color.fromRGBO(59, 89, 152, 1.0),
+                    color: Colors.teal,
                   ),
                 ),
               ],
@@ -196,7 +193,15 @@ class _SignInScreenState extends State<SignInScreen> {
           content: Constants.PASSWORD_FAIL_MESAGE,
           onPressed: _changeBlackVisible);
     } else {
-      usersStore.userSignIn(email, password);
+      try {
+        _changeBlackVisible();
+        await usersStore.userSignIn(email, password);
+      } catch (error) {
+        _showErrorAlert(
+            title: Constants.ERROR_OCCURED,
+            content: error.toString(),
+            onPressed: _changeBlackVisible);
+      }
     }
   }
 

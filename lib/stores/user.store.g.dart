@@ -26,10 +26,24 @@ mixin _$UsersStore on _UsersStore, Store {
     }, _$_isUserLoggedInAtom, name: '${_$_isUserLoggedInAtom.name}_set');
   }
 
+  final _$userSignUpAsyncAction = AsyncAction('userSignUp');
+
+  @override
+  Future<void> userSignUp(dynamic email, dynamic password) {
+    return _$userSignUpAsyncAction.run(() => super.userSignUp(email, password));
+  }
+
   final _$userSignInAsyncAction = AsyncAction('userSignIn');
 
   @override
   Future<void> userSignIn(dynamic email, dynamic password) {
     return _$userSignInAsyncAction.run(() => super.userSignIn(email, password));
+  }
+
+  final _$autoLoginAsyncAction = AsyncAction('autoLogin');
+
+  @override
+  Future<void> autoLogin() {
+    return _$autoLoginAsyncAction.run(() => super.autoLogin());
   }
 }

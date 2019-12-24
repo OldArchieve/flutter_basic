@@ -1,14 +1,10 @@
-import 'package:basic/screens/auth.screens.dart';
-import 'package:basic/screens/entry.screen.dart';
+import './screens/auth.screens.dart';
+import './screens/entry.screen.dart';
 
 import './stores/user.store.dart';
 import 'package:flutter/material.dart';
-
-import './screens/sign_up.screen.dart';
 import './screens/settings.screen.dart';
 import './screens/landing.screen.dart';
-import './screens/sign_in.screen.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
