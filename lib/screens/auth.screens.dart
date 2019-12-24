@@ -1,9 +1,8 @@
-import 'package:basic/constants/constants.dart';
-import 'package:basic/screens/sign_in.screen.dart';
-import 'package:basic/screens/sign_up.screen.dart';
-import 'package:basic/stores/user.store.dart';
+import '../constants/constants.dart';
+import '../screens/sign_in.screen.dart';
+import '../screens/sign_up.screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AuthScreens extends StatefulWidget {
   static const routeName = "auth-screens";

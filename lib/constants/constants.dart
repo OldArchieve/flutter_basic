@@ -13,4 +13,8 @@ class Constants {
   static const SUCCESS_MESSAGE = "Successfully Signed";
   static const REGISTER_TYPE = "Register";
   static const LOGIN_TYPE = "Login";
+  static const USERS_TABLE_NAME = "users";
+  static const USER_DOES_NOT_EXISTS_EXCEPTION_MESSAGE =
+      "User does not exist. Please register. If you have forgotten password, then please click on Forgotten Password link";
+  static const ERROR_OCCURED = "An Error Occured";
 }

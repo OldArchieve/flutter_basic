@@ -1,4 +1,4 @@
-import 'package:basic/widgets/app_drawer.dart';
+import '../widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {

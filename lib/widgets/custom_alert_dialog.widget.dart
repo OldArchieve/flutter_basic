@@ -27,7 +27,7 @@ class CustomAlertDialog extends StatelessWidget {
         ),
       ),
       content: Container(
-        height: 100,
+        height: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

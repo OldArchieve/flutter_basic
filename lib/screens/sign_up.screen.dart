@@ -1,12 +1,10 @@
 import 'dart:core';
-import 'package:basic/constants/constants.dart';
-import 'package:basic/stores/user.store.dart';
+import '../constants/constants.dart';
+import '../stores/user.store.dart';
 import "package:flutter/material.dart";
-import '../business/auth.dart';
 import "../widgets/custom_textfield.widget.dart";
 import '../business/validator.dart';
 import 'package:flutter/services.dart';
-import '../models/user.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/custom_flatbutton.widget.dart';
@@ -201,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           content: Constants.EMAIL_DOES_NOT_MATCH_MESSAGE,
           onPressed: _changeBlackVisible);
     } else {
-      usersStore.userSignIn(email, password);
+      await usersStore.userSignUp(email, password);
     }
   }
 
