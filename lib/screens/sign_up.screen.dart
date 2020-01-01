@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'package:basic/screens/landing.screen.dart';
+
 import '../constants/constants.dart';
 import '../stores/user.store.dart';
 import "package:flutter/material.dart";
@@ -200,6 +202,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           onPressed: _changeBlackVisible);
     } else {
       await usersStore.userSignUp(email, password);
+      if (usersStore.isUserLoggedIn) {
+        Navigator.of(context).pushReplacementNamed(LandingScreen.routeName);
+      }
     }
   }
 
