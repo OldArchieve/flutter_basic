@@ -1,3 +1,5 @@
+import 'package:basic/screens/landing.screen.dart';
+
 import '../constants/constants.dart';
 import '../stores/user.store.dart';
 import "package:flutter/material.dart";
@@ -196,6 +198,9 @@ class _SignInScreenState extends State<SignInScreen> {
       try {
         _changeBlackVisible();
         await usersStore.userSignIn(email, password);
+        if (usersStore.isUserLoggedIn) {
+          Navigator.of(context).pushReplacementNamed(LandingScreen.routeName);
+        }
       } catch (error) {
         _showErrorAlert(
             title: Constants.ERROR_OCCURED,

@@ -11,6 +11,7 @@ abstract class _UsersStore with Store {
   @observable
   bool _isUserLoggedIn = false;
 
+@computed
   bool get isUserLoggedIn {
     return _isUserLoggedIn;
   }
