@@ -1,11 +1,11 @@
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+
 import './screens/auth.screens.dart';
 import './screens/entry.screen.dart';
-
 import './stores/user.store.dart';
-import 'package:flutter/material.dart';
 import './screens/settings.screen.dart';
 import './screens/landing.screen.dart';
-import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
