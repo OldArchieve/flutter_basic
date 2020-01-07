@@ -1,3 +1,7 @@
+import 'package:basic/constants/constants.dart';
+import 'package:basic/stores/folder.store.dart';
+import 'package:basic/widgets/custom_alert_dialog.widget.dart';
+
 import '../widgets/item.widget.dart';
 
 import '../widgets/app_drawer.dart';
@@ -41,11 +45,38 @@ class _LandingScreenState extends State<LandingScreen> {
       scanny.getImageBytes.listen((imageBytes) {
         setState(() {
           _imageBytes = imageBytes;
+          () async {
+            await _saveImage();
+          }();
         });
       });
+      // save image in a folder
+
     } catch (error) {
-      print(error);
+      //print(error);
+      _showAlert(title: Constants.ERROR_OCCURED, content: error);
     }
+  }
+
+  Future<void> _saveImage() async {
+    final result = await FolderStore().createFolderAndSaveImage(_imageBytes);
+    if (result == "success") {
+      _showAlert(title: "Sucess", content: "Image saved successfully");
+    }
+  }
+
+  void _showAlert({String title, String content}) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return CustomAlertDialog(
+          content: content,
+          title: title,
+          onPressed: () {},
+        );
+      },
+    );
   }
 
   @override
