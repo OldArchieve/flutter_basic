@@ -1,7 +1,6 @@
 import 'dart:async';
+import '../models/model.dart';
 import 'package:flutter/services.dart';
-
-import '../models/user.dart';
 
 class Auth {
   static Future<String> signIn(String email, String password) async {
@@ -25,7 +24,7 @@ class Auth {
   }
 
   static void addUser(User user) async {
-    checkUserExist(user.userID).then((value) {
+    checkUserExist(user.id).then((value) {
       if (!value) {
         print("user ${user.firstName} ${user.email} added");
       } else {
@@ -34,7 +33,7 @@ class Auth {
     });
   }
 
-  static Future<bool> checkUserExist(String userID) async {
+  static Future<bool> checkUserExist(int userID) async {
     bool exists = false;
     try {
       return exists;

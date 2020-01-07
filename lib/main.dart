@@ -7,7 +7,11 @@ import './stores/user.store.dart';
 import './screens/settings.screen.dart';
 import './screens/landing.screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  //WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
