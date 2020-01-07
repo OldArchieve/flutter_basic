@@ -1,3 +1,4 @@
+import 'package:basic/models/model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +9,12 @@ import './screens/settings.screen.dart';
 import './screens/landing.screen.dart';
 
 void main() async {
-  //WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  final isExisting = await BasicModel().initializeDB();
+  if (isExisting) {
+    //BasicModel().initializeDB();
 
+  }
   runApp(MyApp());
 }
 

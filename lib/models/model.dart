@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:sqfentity/sqfentity.dart';
 import 'package:sqfentity_gen/sqfentity_gen.dart';
-import 'package:sqflite/sqflite.dart' as sql;
-import 'package:path/path.dart' as path;
 
 part 'model.g.dart';
 

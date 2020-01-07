@@ -38,7 +38,13 @@ abstract class _UsersStore with Store {
   }
 
   Future<void> _tryToSaveUser(email, password) async {
-    final result = await User(email: email, password: password).save();
+    final result = await User(
+            email: email,
+            password: password,
+            isActive: true,
+            createdAt: DateTime.now().millisecondsSinceEpoch,
+            updatedAt: DateTime.now().millisecondsSinceEpoch)
+        .save();
 
     if (result > 0) {
       _isUserLoggedIn = true;
