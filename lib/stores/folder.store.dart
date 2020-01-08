@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import '../constants/constants.dart';
 import '../exception/SQLException.dart';
 import '../models/model.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -13,60 +13,66 @@ part 'folder.store.g.dart';
 class FolderStore = _FolderStore with _$FolderStore;
 
 abstract class _FolderStore with Store {
-  List<Folder> _folders;
-
-  @computed
-  List<Folder> get folders {
-    return _folders;
-  }
+  @observable
+  List<Folder> folders;
 
   @action
   Future<String> createFolderAndSaveImage(Uint8List imageArray) async {
     try {
+      final imageName =
+          "${DateTime.now().millisecondsSinceEpoch.toString()}.png";
+
+      String imagePath = await _createFileFromBytes(imageArray, imageName);
+
       final result = await Folder(
+              imageUrl: imagePath,
               title: DateTime.now().toIso8601String(),
               createdAt: DateTime.now().millisecondsSinceEpoch,
               updatedAt: DateTime.now().millisecondsSinceEpoch)
           .save();
 
       if (result > 0) {
-        await _saveImage(result, imageArray);
+        await _saveImage(result, imagePath, imageName);
       } else {
-        throw SQLException("Could not save Folder");
+        throw SQLException(Constants.ERROR_SAVE_FOLDER);
       }
     } catch (err) {
       throw SQLException(err);
     }
-    return "sucess";
+    return Constants.SUCCESS;
   }
 
-  Future _saveImage(int result, Uint8List imageArray) async {
-    final imageName = "${DateTime.now().millisecondsSinceEpoch.toString()}.png";
+  @action
+  void fetchFolders() {
+    Folder().select().toList().then((result) => folders = result);
+  }
+
+  Future _saveImage(int result, String imagePath, String imageName) async {
     final imageResult = await Image(
             folderId: result,
-            imageUrl: await _createFileFromBytes(imageArray, imageName),
+            imageUrl: imagePath,
             createdAt: DateTime.now().millisecondsSinceEpoch,
             updatedAt: DateTime.now().millisecondsSinceEpoch,
             title: imageName)
         .save();
 
     if (imageResult > 0) {
-      log("Image save successfully");
+      log(Constants.SUCCESS_MESSAGE_IMAGE);
     } else {
-      throw SQLException("Could not save image");
+      throw SQLException(Constants.ERROR_SAVE_IMAGE);
     }
   }
 
   Future<String> _createFileFromBytes(final bytes, final imageName) async {
     String dir = (await getApplicationDocumentsDirectory()).path;
     String fullPath = "$dir/$imageName";
-    print("storing at $fullPath");
+    log("storing at $fullPath");
     File file = File(fullPath);
     await file.writeAsBytes(bytes);
-    print(file.path);
+    log(file.path);
 
     final result = await ImageGallerySaver.saveImage(bytes);
-    print(result);
+    log(result);
     return file.path;
   }
 }

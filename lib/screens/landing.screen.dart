@@ -1,8 +1,8 @@
-import 'package:basic/constants/constants.dart';
-import 'package:basic/stores/folder.store.dart';
-import 'package:basic/widgets/custom_alert_dialog.widget.dart';
-
-import '../widgets/item.widget.dart';
+import '../stores/folder.store.dart';
+import '../widgets/custom_alert_dialog.widget.dart';
+import '../widgets/foldere.widget.dart';
+import 'package:provider/provider.dart';
+import '../constants/constants.dart';
 
 import '../widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,7 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   dynamic _imageBytes;
   final Scanny scanny;
+  bool _isLoading = false;
 
   _LandingScreenState(this.scanny);
 
@@ -25,10 +26,19 @@ class _LandingScreenState extends State<LandingScreen> {
   void initState() {
     super.initState();
 
-    () async {
-      //ask permissions
-      //askPermissions();
-    }();
+    //ask permissions
+    //askPermissions();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadFolders();
+  }
+
+  void loadFolders() {
+    final folderStore = Provider.of<FolderStore>(context);
+    folderStore.fetchFolders();
   }
 
   Future<void> askPermissions() async {
@@ -43,6 +53,7 @@ class _LandingScreenState extends State<LandingScreen> {
       scanny.callScanner;
       //listen to the results of activity
       scanny.getImageBytes.listen((imageBytes) {
+        _isLoading = true;
         setState(() {
           _imageBytes = imageBytes;
           () async {
@@ -60,9 +71,14 @@ class _LandingScreenState extends State<LandingScreen> {
 
   Future<void> _saveImage() async {
     final result = await FolderStore().createFolderAndSaveImage(_imageBytes);
-    if (result == "success") {
-      _showAlert(title: "Sucess", content: "Image saved successfully");
+    if (result == Constants.SUCCESS) {
+      _showAlert(
+          title: Constants.SUCCESS, content: Constants.SUCCESS_MESSAGE_IMAGE);
+      loadFolders();
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _showAlert({String title, String content}) {
@@ -89,7 +105,11 @@ class _LandingScreenState extends State<LandingScreen> {
       ),
       drawer: AppDrawer(),
       body: Center(
-        child: ItemWidget(),
+        child: _isLoading
+            ? CircularProgressIndicator(
+                backgroundColor: Colors.teal,
+              )
+            : FolderWidget(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: scanDocument,

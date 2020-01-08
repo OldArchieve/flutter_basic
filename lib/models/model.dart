@@ -32,6 +32,7 @@ const tableFolder = SqfEntityTable(
   modelName: null,
   fields: [
     SqfEntityField('title', DbType.text),
+    SqfEntityField('imageUrl', DbType.text),
     SqfEntityField('createdAt', DbType.integer),
     SqfEntityField('updatedAt', DbType.integer),
   ],

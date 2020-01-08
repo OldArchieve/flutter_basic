@@ -1,4 +1,5 @@
-import 'package:basic/models/model.dart';
+import './models/model.dart';
+import './stores/folder.store.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<UsersStore>(
             create: (_) => UsersStore(),
+          ),
+          Provider<FolderStore>(
+            create: (_) => FolderStore(),
           ),
         ],
         child: EntryScreen(),

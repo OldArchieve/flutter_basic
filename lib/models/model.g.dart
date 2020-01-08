@@ -61,6 +61,7 @@ class TableFolder extends SqfEntityTableBase {
     // declare fields
     fields = [
       SqfEntityFieldBase('title', DbType.text),
+      SqfEntityFieldBase('imageUrl', DbType.text),
       SqfEntityFieldBase('createdAt', DbType.integer),
       SqfEntityFieldBase('updatedAt', DbType.integer),
     ];
@@ -1263,20 +1264,26 @@ class ImageManager extends SqfEntityProvider {
 // region Folder
 class Folder {
   Folder(
-      {this.id, this.title, this.createdAt, this.updatedAt, this.isDeleted}) {
+      {this.id,
+      this.title,
+      this.imageUrl,
+      this.createdAt,
+      this.updatedAt,
+      this.isDeleted}) {
     _setDefaultValues();
   }
-  Folder.withFields(
-      this.title, this.createdAt, this.updatedAt, this.isDeleted) {
+  Folder.withFields(this.title, this.imageUrl, this.createdAt, this.updatedAt,
+      this.isDeleted) {
     _setDefaultValues();
   }
-  Folder.withId(
-      this.id, this.title, this.createdAt, this.updatedAt, this.isDeleted) {
+  Folder.withId(this.id, this.title, this.imageUrl, this.createdAt,
+      this.updatedAt, this.isDeleted) {
     _setDefaultValues();
   }
   Folder.fromMap(Map<String, dynamic> o) {
     id = o['id'] as int;
     title = o['title'] as String;
+    imageUrl = o['imageUrl'] as String;
     createdAt = o['createdAt'] as int;
     updatedAt = o['updatedAt'] as int;
     isDeleted = o['isDeleted'] != null ? o['isDeleted'] == 1 : null;
@@ -1284,6 +1291,7 @@ class Folder {
   // FIELDS (Folder)
   int id;
   String title;
+  String imageUrl;
   int createdAt;
   int updatedAt;
   bool isDeleted;
@@ -1323,6 +1331,10 @@ class Folder {
       map['title'] = title;
     }
 
+    if (imageUrl != null) {
+      map['imageUrl'] = imageUrl;
+    }
+
     if (createdAt != null) {
       map['createdAt'] = createdAt;
     }
@@ -1346,6 +1358,10 @@ class Folder {
     }
     if (title != null) {
       map['title'] = title;
+    }
+
+    if (imageUrl != null) {
+      map['imageUrl'] = imageUrl;
     }
 
     if (createdAt != null) {
@@ -1380,7 +1396,7 @@ class Folder {
   }
 
   List<dynamic> toArgs() {
-    return [id, title, createdAt, updatedAt, isDeleted];
+    return [id, title, imageUrl, createdAt, updatedAt, isDeleted];
   }
 
   static Future<List<Folder>> fromWebUrl(String url) async {
@@ -1475,7 +1491,7 @@ class Folder {
   /// Returns a <List<BoolResult>>
   Future<List<BoolResult>> saveAll(List<Folder> folders) async {
     final results = _mnFolder.saveAll(
-        'INSERT OR REPLACE INTO folder (id,  title, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?)',
+        'INSERT OR REPLACE INTO folder (id,  title, imageUrl, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?,?)',
         folders);
     return results;
   }
@@ -1486,8 +1502,8 @@ class Folder {
   Future<int> _upsert() async {
     try {
       if (await _mnFolder.rawInsert(
-              'INSERT OR REPLACE INTO folder (id,  title, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?)',
-              [id, title, createdAt, updatedAt, isDeleted]) ==
+              'INSERT OR REPLACE INTO folder (id,  title, imageUrl, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?,?)',
+              [id, title, imageUrl, createdAt, updatedAt, isDeleted]) ==
           1) {
         saveResult = BoolResult(
             success: true, successMessage: 'Folder id=$id updated successfuly');
@@ -1509,7 +1525,7 @@ class Folder {
   /// Returns a <List<BoolResult>>
   Future<List<BoolResult>> upsertAll(List<Folder> folders) async {
     final results = await _mnFolder.rawInsertAll(
-        'INSERT OR REPLACE INTO folder (id,  title, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?)',
+        'INSERT OR REPLACE INTO folder (id,  title, imageUrl, createdAt, updatedAt,isDeleted)  VALUES (?,?,?,?,?,?)',
         folders);
     return results;
   }
@@ -1963,6 +1979,11 @@ class FolderFilterBuilder extends SearchCriteria {
     return _title = setField(_title, 'title', DbType.text);
   }
 
+  FolderField _imageUrl;
+  FolderField get imageUrl {
+    return _imageUrl = setField(_imageUrl, 'imageUrl', DbType.text);
+  }
+
   FolderField _createdAt;
   FolderField get createdAt {
     return _createdAt = setField(_createdAt, 'createdAt', DbType.integer);
@@ -2320,6 +2341,12 @@ class FolderFields {
   static TableField get title {
     return _fTitle =
         _fTitle ?? SqlSyntax.setField(_fTitle, 'title', DbType.text);
+  }
+
+  static TableField _fImageUrl;
+  static TableField get imageUrl {
+    return _fImageUrl =
+        _fImageUrl ?? SqlSyntax.setField(_fImageUrl, 'imageUrl', DbType.text);
   }
 
   static TableField _fCreatedAt;
