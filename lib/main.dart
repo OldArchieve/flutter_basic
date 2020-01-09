@@ -1,3 +1,5 @@
+import './models/model.dart';
+import './stores/folder.store.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +9,15 @@ import './stores/user.store.dart';
 import './screens/settings.screen.dart';
 import './screens/landing.screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final isExisting = await BasicModel().initializeDB();
+  if (isExisting) {
+    //BasicModel().initializeDB();
+
+  }
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -21,6 +31,9 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<UsersStore>(
             create: (_) => UsersStore(),
+          ),
+          Provider<FolderStore>(
+            create: (_) => FolderStore(),
           ),
         ],
         child: EntryScreen(),
