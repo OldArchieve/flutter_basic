@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:basic/models/model.dart';
+import 'package:basic/widgets/custom_off_stage.widget.dart';
+
+import '../constants/constants.dart';
 import '../stores/folder.store.dart';
 import '../widgets/custom_alert_dialog.widget.dart';
 import '../widgets/foldere.widget.dart';
 import 'package:provider/provider.dart';
-import '../constants/constants.dart';
 
 import '../widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +38,6 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    loadFolders();
-  }
-
-  void loadFolders() {
-    final folderStore = Provider.of<FolderStore>(context);
-    folderStore.fetchFolders();
   }
 
   Future<void> askPermissions() async {
@@ -83,7 +80,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 _blackVisible = false;
               });
             });
-        loadFolders();
+        // _loadFolders();
       }
     });
   }
@@ -104,6 +101,8 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final folderStore = Provider.of<FolderStore>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -111,31 +110,47 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
       ),
       drawer: AppDrawer(),
-      body: Stack(
-        children: <Widget>[
-          FolderWidget(),
-          Offstage(
-            offstage: !_blackVisible,
-            child: GestureDetector(
-              onTap: () {},
-              child: AnimatedOpacity(
-                opacity: _blackVisible ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 400),
-                curve: Curves.ease,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.black54,
-                ),
-              ),
-            ),
+      body: FutureBuilder(
+        future: folderStore.fetchFolders(),
+        builder: (_, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              {
+                _blackVisible = true;
+                return CustomOffStageWidget(_blackVisible);
+              }
+            default:
+              if (snapshot.hasError) {
+                return CustomAlertDialog(
+                  title: Constants.ERROR_OCCURED,
+                  content: snapshot.error,
+                  onPressed: () {},
+                );
+              } else {
+                final List<Folder> folders = snapshot.data;
+                return Stack(
+                  children: <Widget>[
+                    FolderWidget(folders),
+                    CustomOffStageWidget(_blackVisible),
+                  ],
+                );
+              }
+          }
+        },
+      ),
+      floatingActionButton: Container(
+        width: 80,
+        height: 80,
+        child: FloatingActionButton(
+          onPressed: scanDocument,
+          child: Icon(
+            Icons.camera_alt,
+            size: 60,
           ),
-        ],
+          backgroundColor: Colors.teal,
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: scanDocument,
-        child: Icon(Icons.camera_enhance),
-        backgroundColor: Colors.teal,
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

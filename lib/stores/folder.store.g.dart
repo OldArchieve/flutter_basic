@@ -35,15 +35,10 @@ mixin _$FolderStore on _FolderStore, Store {
         .run(() => super.createFolderAndSaveImage(imageArray));
   }
 
-  final _$_FolderStoreActionController = ActionController(name: '_FolderStore');
+  final _$fetchFoldersAsyncAction = AsyncAction('fetchFolders');
 
   @override
-  void fetchFolders() {
-    final _$actionInfo = _$_FolderStoreActionController.startAction();
-    try {
-      return super.fetchFolders();
-    } finally {
-      _$_FolderStoreActionController.endAction(_$actionInfo);
-    }
+  Future<List<Folder>> fetchFolders() {
+    return _$fetchFoldersAsyncAction.run(() => super.fetchFolders());
   }
 }

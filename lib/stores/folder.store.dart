@@ -43,8 +43,10 @@ abstract class _FolderStore with Store {
   }
 
   @action
-  void fetchFolders() {
-    Folder().select().toList().then((result) => folders = result);
+  Future<List<Folder>> fetchFolders() async {
+    final folderList = await Folder().select().toList();
+    folders = folderList;
+    return folderList;
   }
 
   Future _saveImage(int result, String imagePath, String imageName) async {
@@ -74,5 +76,10 @@ abstract class _FolderStore with Store {
     final result = await ImageGallerySaver.saveImage(bytes);
     log(result);
     return file.path;
+  }
+
+  Future<Folder> findFolderById(String id) async {
+    final folder = await Folder().getById(int.parse(id));
+    return folder;
   }
 }
