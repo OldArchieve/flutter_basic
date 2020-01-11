@@ -15,13 +15,12 @@ class _EntryScreenState extends State<EntryScreen> {
 
   @override
   void initState() {
+    super.initState();
     () async {
       await new Future.delayed(Duration.zero, () {
         tryAutoLogin();
       });
     }();
-
-    super.initState();
   }
 
   void tryAutoLogin() async {

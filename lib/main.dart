@@ -1,3 +1,7 @@
+import 'package:basic/screens/folder.detail.screen.dart';
+import 'package:basic/screens/image.edit.screen.dart';
+import 'package:basic/stores/image.store.dart';
+
 import './models/model.dart';
 import './stores/folder.store.dart';
 import 'package:provider/provider.dart';
@@ -22,27 +26,32 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Basic',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
+    return MultiProvider(
+      providers: [
+        Provider<UsersStore>(
+          create: (_) => UsersStore(),
+        ),
+        Provider<FolderStore>(
+          create: (_) => FolderStore(),
+        ),
+        Provider<ImageStore>(
+          create: (_) => ImageStore(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Basic',
+        theme: ThemeData(
+          primarySwatch: Colors.teal,
+        ),
+        home: EntryScreen(),
+        routes: {
+          SettingsScreen.routeName: (ctx) => SettingsScreen(),
+          AuthScreens.routeName: (ctx) => AuthScreens(),
+          LandingScreen.routeName: (ctx) => LandingScreen(),
+          FolderDetailScreen.routeName: (ctx) => FolderDetailScreen(),
+          ImageEditScreen.routeName: (ctx) => ImageEditScreen(),
+        },
       ),
-      home: MultiProvider(
-        providers: [
-          Provider<UsersStore>(
-            create: (_) => UsersStore(),
-          ),
-          Provider<FolderStore>(
-            create: (_) => FolderStore(),
-          ),
-        ],
-        child: EntryScreen(),
-      ),
-      routes: {
-        SettingsScreen.routeName: (ctx) => SettingsScreen(),
-        AuthScreens.routeName: (ctx) => AuthScreens(),
-        LandingScreen.routeName: (ctx) => LandingScreen(),
-      },
     );
   }
 }

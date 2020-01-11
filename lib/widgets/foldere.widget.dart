@@ -1,39 +1,60 @@
-import 'package:basic/models/model.dart' as model;
-import 'package:basic/stores/folder.store.dart';
+import '../models/model.dart' as model;
+import 'package:basic/screens/folder.detail.screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 import 'dart:io';
-
-import '../constants/constants.dart';
-import 'custom_alert_dialog.widget.dart';
+import 'package:intl/intl.dart';
 
 class FolderWidget extends StatelessWidget {
+  final List<model.Folder> folders;
+
+  FolderWidget(this.folders);
+
   @override
   Widget build(BuildContext context) {
-    final _folderStore = Provider.of<FolderStore>(context);
-
-    return Observer(
-      builder: (_) => _folderStore.folders == null
-          ? Text("Scan for docs ")
-          : ListView.builder(
-              itemCount: _folderStore.folders.length,
-              itemBuilder: (_, index) => Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: CircleAvatar(
-                      child: Image.file(
-                          File(_folderStore.folders[index].imageUrl)),
-                    ),
-                    title: Text(_folderStore.folders[index].title),
-                    //subtitle: Text(_items.getItems[index].description),
-                    selected: false,
-                    onTap: () {},
-                  ),
-                  Divider(),
-                ],
+    return ListView.builder(
+      itemCount: folders.length,
+      itemBuilder: (_, index) => Column(
+        children: <Widget>[
+          Container(
+            height: 80,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 1),
+            child: ListTile(
+              leading: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: 80,
+                  minWidth: 80,
+                  maxHeight: 80,
+                  maxWidth: 80,
+                ),
+                child: Image.file(
+                  File(folders[index].imageUrl),
+                  fit: BoxFit.fill,
+                ),
               ),
+              title: Text(folders[index].title),
+              subtitle: Text(
+                DateFormat('dd-MM-yyy').format(
+                  DateTime.fromMillisecondsSinceEpoch(folders[index].createdAt),
+                ),
+              ),
+              selected: false,
+              trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {},
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(FolderDetailScreen.routeName,
+                    arguments: {
+                      "id": folders[index].id,
+                      "title": folders[index].title
+                    });
+              },
             ),
+          ),
+          Divider(),
+        ],
+      ),
     );
   }
 }
