@@ -1,4 +1,5 @@
 import 'package:basic/screens/folder.detail.screen.dart';
+import 'package:basic/screens/image.edit.screen.dart';
 import 'package:basic/stores/image.store.dart';
 
 import './models/model.dart';
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           AuthScreens.routeName: (ctx) => AuthScreens(),
           LandingScreen.routeName: (ctx) => LandingScreen(),
-          FolderDetailScreen.routeName: (ctx) => FolderDetailScreen()
+          FolderDetailScreen.routeName: (ctx) => FolderDetailScreen(),
+          ImageEditScreen.routeName: (ctx) => ImageEditScreen(),
         },
       ),
     );

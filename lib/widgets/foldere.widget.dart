@@ -45,7 +45,10 @@ class FolderWidget extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pushNamed(FolderDetailScreen.routeName,
-                    arguments: {"id": folders[index].id});
+                    arguments: {
+                      "id": folders[index].id,
+                      "title": folders[index].title
+                    });
               },
             ),
           ),

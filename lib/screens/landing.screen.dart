@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:basic/models/model.dart';
+import 'package:basic/widgets/custom_floating_button.widget.dart';
 import 'package:basic/widgets/custom_off_stage.widget.dart';
 
 import '../constants/constants.dart';
@@ -80,7 +81,6 @@ class _LandingScreenState extends State<LandingScreen> {
                 _blackVisible = false;
               });
             });
-        // _loadFolders();
       }
     });
   }
@@ -138,17 +138,8 @@ class _LandingScreenState extends State<LandingScreen> {
           }
         },
       ),
-      floatingActionButton: Container(
-        width: 80,
-        height: 80,
-        child: FloatingActionButton(
-          onPressed: scanDocument,
-          child: Icon(
-            Icons.camera_alt,
-            size: 60,
-          ),
-          backgroundColor: Colors.teal,
-        ),
+      floatingActionButton: CustomFloatingButton(
+        onPressed: scanDocument,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

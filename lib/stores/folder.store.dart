@@ -82,4 +82,17 @@ abstract class _FolderStore with Store {
     final folder = await Folder().getById(int.parse(id));
     return folder;
   }
+
+  Future<String> saveImageWithFolderId(
+      int folderId, Uint8List imageArray) async {
+    try {
+      final imageName =
+          "${DateTime.now().millisecondsSinceEpoch.toString()}.png";
+      String imagePath = await _createFileFromBytes(imageArray, imageName);
+      await _saveImage(folderId, imagePath, imageName);
+    } catch (err) {
+      throw SQLException(err);
+    }
+    return Constants.SUCCESS;
+  }
 }
