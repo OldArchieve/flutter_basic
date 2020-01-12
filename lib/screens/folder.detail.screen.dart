@@ -5,11 +5,20 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:basic/models/model.dart' as model;
 import 'package:basic/stores/image.store.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:scanny/scanny.dart';
 
 import '../constants/constants.dart';
 import '../widgets/custom_alert_dialog.widget.dart';
+import 'package:pdf/pdf.dart' as pdf;
+import 'package:pdf/widgets.dart' as pdfWidget;
+import 'dart:ui' as ui;
+import 'package:image/image.dart' as img;
+
+//import 'package:image/image.dart' as importImage;
 
 class FolderDetailScreen extends StatefulWidget {
   static const routeName = "folder-detail-screen";
@@ -62,6 +71,52 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
     );
   }
 
+  void convertToPdf(final List<model.Image> images, String title) async {
+    setState(() {
+      _isLoading = true;
+    });
+    final myPDF = pdfWidget.Document();
+
+    for (int i = 0; i < images.length; i++) {
+      final uint8list = File(images[i].imageUrl).readAsBytesSync();
+      final imgDimension = img.decodeImage(uint8list);
+
+      final myHeight = imgDimension.height ~/ 3;
+      final myWidth = imgDimension.width ~/ 3;
+
+      final codec = await ui.instantiateImageCodec(uint8list,
+          targetHeight: myHeight, targetWidth: myWidth);
+
+      final frame = await codec.getNextFrame();
+      final image = frame.image;
+      final imgx = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+
+      final imagePdf = pdf.PdfImage(myPDF.document,
+          image: imgx.buffer.asUint8List(), width: myWidth, height: myHeight);
+
+      final page = pdfWidget.Page(
+        pageFormat: pdf.PdfPageFormat(
+            myWidth * pdf.PdfPageFormat.mm, myHeight * pdf.PdfPageFormat.mm),
+        build: (_) {
+          return pdfWidget.Center(
+              child: pdfWidget.Expanded(child: pdfWidget.Image(imagePdf)));
+        },
+      );
+
+      myPDF.addPage(page);
+    }
+
+    final pdfName = '$title.pdf';
+    final output = (await getTemporaryDirectory()).path;
+    final file = File("$output/$pdfName");
+    await file.writeAsBytes(myPDF.save());
+
+    await Printing.sharePdf(bytes: myPDF.save(), filename: pdfName);
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -73,10 +128,16 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
     final title = args["title"];
 
     return _isLoading
-        ? Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.teal,
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text("loading"),
             ),
+            body: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.teal,
+              ),
+            ),
+            backgroundColor: Colors.black12,
           )
         : FutureBuilder(
             future: imageStore.findImagesByFolderId(folderId),
@@ -100,6 +161,14 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                     return Scaffold(
                       appBar: AppBar(
                         title: Text('$title'),
+                        actions: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () {
+                              convertToPdf(result, title);
+                            },
+                          ),
+                        ],
                       ),
                       body: Column(
                         children: <Widget>[
