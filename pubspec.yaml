@@ -38,6 +38,9 @@ dependencies:
   intl: ^0.16.1
   photo_view: ^0.9.1
   #photofilters: ^1.0.5
+  pdf: ^1.4.1
+  image:
+  printing: ^3.0.2
 
 dev_dependencies:
   flutter_test:

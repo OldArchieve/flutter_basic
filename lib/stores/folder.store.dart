@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:intl/intl.dart';
+
 import '../constants/constants.dart';
 import '../exception/SQLException.dart';
 import '../models/model.dart';
@@ -26,7 +28,7 @@ abstract class _FolderStore with Store {
 
       final result = await Folder(
               imageUrl: imagePath,
-              title: DateTime.now().toIso8601String(),
+              title: DateFormat('dd-MM-yyyy hh:mm:ss').format(DateTime.now()),
               createdAt: DateTime.now().millisecondsSinceEpoch,
               updatedAt: DateTime.now().millisecondsSinceEpoch)
           .save();
